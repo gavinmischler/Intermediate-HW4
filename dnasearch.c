@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <ctype.h>
 #include "dnasearch.h"
 
 /* The functions for working with the dnasearch program,
@@ -30,4 +31,57 @@ void InsertAfter(User_Input * u, char * c) {
   new_u->next = u->next;
   strcpy((new_u->user_pattern), c);
   u->next = new_u;
+}
+
+// Check that the char trying to be read in is valid
+/*  Returns
+    1: char is either C, A, T, of G, of upper or lower case
+    0: char is a whitespace or newline character
+    -1: char is invalid
+*/
+int CheckValidChar(char c) {
+  char big_c = (char)toupper(c);
+  if (big_c == 'C' || big_c == 'A' || big_c == 'T' || big_c == 'G') {
+    return 1;
+  } else if (big_c == ' ' || big_c == '\n') {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+// Read in the characters in the file into the sequence array
+/*
+  Inputs:
+    fp: pointer to text file with dna sequence
+    sequence: pointer to char array for sequence
+    num_bases: the number of valid bases found
+  Returns
+    num_bases>1: success at reading entire file
+    0: failed to read in file, or the file had not bases in it
+*/
+int ReadFile(FILE *fp, char *sequence, int num_bases) {
+  char c = fgetc(fp);
+  while(!feof(fp)) {
+    int validity = CheckValidChar(c);
+    switch (validity) {
+      case 1:
+        *(sequence+num_bases) = (char)toupper(c);
+        num_bases += 1;
+        printf("Just read in: %c\n", c);
+        break;
+      case 0:
+        printf("Just read in a space or newline\n");
+        break;
+      case -1:
+        printf("Just read in something invalid\n");
+        return 0;
+    }
+    c = fgetc(fp);
+  }
+  if (num_bases == 0) {
+    printf("Error: failed to read in file\n");
+    return 0;
+  }
+  return num_bases;//function succeeded and at least one valid char was read in
 }
