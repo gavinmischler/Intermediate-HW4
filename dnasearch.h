@@ -17,6 +17,7 @@ void InsertAfter(User_Input * u, char c[]);
 
 int CheckValidChar(char c);
 int ReadFile(FILE *fp, char *sequence, int num_bases);
-int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns);
+int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns, unsigned int filelength);
+int CheckValidPattern(char pattern[], unsigned int filelength);
 
 #endif //DNASEARCh_H included

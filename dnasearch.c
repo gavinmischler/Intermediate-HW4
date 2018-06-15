@@ -85,23 +85,56 @@ int ReadFile(FILE *fp, char *sequence, int num_bases) {
   return num_bases;//function succeeded and at least one valid char was read in
 }
 
+// Checks a user-input pattern to make sure it is valid
+/*
+  Returns
+    int 1 if valid
+    int 0 if not valid
+*/
+int CheckValidPattern(char pattern[], unsigned int filelength) {
+  if (strlen(pattern) > filelength) {
+    return 0;
+  }
+  int sz = strlen(pattern);
+  for (int i = 0; i < sz; i++) {
+    printf("checking char: %c\n", pattern[i]);
+    if (CheckValidChar(pattern[i]) != 1) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
 // Read in each user input (space delimited) into the patterns array of strings
 // which holds up to 50 strings that are each at most 100 chars long
 /*
   Returns
     int: the number of input patterns read in
+    0 if invalid pattern
 */
-int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns) {
+int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns, unsigned int filelength) {
   char buffer[500];
-  while (fgets(buffer, 500, stdin) != NULL) { //read in the line
-    char temp_pattern[SMALL_MAX_PATTERN_SIZE];
-    if (scanf("%s\n", temp_pattern) == 0) {
-      printf("Failed to read in line of pattern inputs\n");
-      return -1;
+  if (fgets(buffer, 500, stdin) != NULL) { //read in the line
+    printf("length is: %lu\n", strlen(buffer));
+    char * token;
+    char delim[2] = " ";
+    token = strtok(buffer, delim);
+    while (token != NULL) {
+      strcpy(patterns[num_patterns], token);
+      num_patterns += 1;
+      token = strtok(NULL, delim);
     }
-    strcpy(patterns[num_patterns], temp_pattern);
-    num_patterns += 1;
     // NEED TO BE ABLE TO COPY MORE THAN JUST ONE PATTERN FROM THE LINE
   }
-  return num_patterns
+  printf("num_patterns: %d\n", num_patterns);
+  // Check that each pattern is valid
+  for (int i = 0; i < num_patterns; i++) {
+    printf("checking pattern: %s\n", patterns[i]);
+    if (!CheckValidPattern(patterns[i], filelength)) {
+      printf("Invalid pattern\n");
+      return 0;
+    }
+  }
+
+  return num_patterns;
 }
