@@ -40,10 +40,7 @@ int main(int argc, char const *argv[]) {
   //Read in the user's list of patterns they want to search for into buffer
   int num_patterns = 0;
   char patterns[50];
-  char buffer[500];
-  while (fgets(buffer, 500, stdin) != EOF) {
 
-  }
 
 
   // Linked list testing
