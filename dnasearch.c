@@ -71,10 +71,9 @@ int ReadFile(FILE *fp, char *sequence, int num_bases) {
         printf("Just read in: %c\n", c);
         break;
       case 0:
-        printf("Just read in a space or newline\n");
+        //printf("Just read in a space or newline\n");
         break;
       case -1:
-        printf("Just read in something invalid\n");
         return 0;
     }
     c = fgetc(fp);
@@ -84,4 +83,25 @@ int ReadFile(FILE *fp, char *sequence, int num_bases) {
     return 0;
   }
   return num_bases;//function succeeded and at least one valid char was read in
+}
+
+// Read in each user input (space delimited) into the patterns array of strings
+// which holds up to 50 strings that are each at most 100 chars long
+/*
+  Returns
+    int: the number of input patterns read in
+*/
+int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns) {
+  char buffer[500];
+  while (fgets(buffer, 500, stdin) != NULL) { //read in the line
+    char temp_pattern[SMALL_MAX_PATTERN_SIZE];
+    if (scanf("%s\n", temp_pattern) == 0) {
+      printf("Failed to read in line of pattern inputs\n");
+      return -1;
+    }
+    strcpy(patterns[num_patterns], temp_pattern);
+    num_patterns += 1;
+    // NEED TO BE ABLE TO COPY MORE THAN JUST ONE PATTERN FROM THE LINE
+  }
+  return num_patterns
 }

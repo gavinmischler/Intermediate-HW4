@@ -2,6 +2,7 @@
 #define DNASEARCH_H
 
 #define MAX_PATTERN_SIZE 15000
+#define SMALL_MAX_PATTERN_SIZE 100
 
 // Linked List structures
 typedef struct _UserInput
@@ -16,5 +17,6 @@ void InsertAfter(User_Input * u, char c[]);
 
 int CheckValidChar(char c);
 int ReadFile(FILE *fp, char *sequence, int num_bases);
+int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns);
 
 #endif //DNASEARCh_H included

@@ -15,7 +15,7 @@ int main(int argc, char const *argv[]) {
     filepath = malloc(strlen(argv[1]+1));
     strcpy(filepath, argv[1]);
   } else {
-    printf("Error: Not the right number of input arguments. Specify the path to the DNA test sequence text file.\n");
+    printf("Invalid text file\n");
     return -1;
   }
 
@@ -29,7 +29,21 @@ int main(int argc, char const *argv[]) {
   //   if (!ReadFile(fp, ))
   // }
   int num_found = ReadFile(fp, sequence, 0);
+  if (num_found == 0) {
+    printf("Invalid text file\n");
+    return -1;
+  }
   printf("Scanned in: %d\n", num_found);
+  printf("G should be: %c\n", *(sequence+2));
+
+
+  //Read in the user's list of patterns they want to search for into buffer
+  int num_patterns = 0;
+  char patterns[50];
+  char buffer[500];
+  while (fgets(buffer, 500, stdin) != EOF) {
+
+  }
 
 
   // Linked list testing
