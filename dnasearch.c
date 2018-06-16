@@ -68,7 +68,6 @@ int ReadFile(FILE *fp, char *sequence, int num_bases) {
       case 1:
         *(sequence+num_bases) = (char)toupper(c);
         num_bases += 1;
-        printf("Just read in: %c\n", c);
         break;
       case 0:
         //printf("Just read in a space or newline\n");
@@ -79,7 +78,6 @@ int ReadFile(FILE *fp, char *sequence, int num_bases) {
     c = fgetc(fp);
   }
   if (num_bases == 0) {
-    printf("Error: failed to read in file\n");
     return 0;
   }
   return num_bases;//function succeeded and at least one valid char was read in
@@ -93,12 +91,14 @@ int ReadFile(FILE *fp, char *sequence, int num_bases) {
 */
 int CheckValidPattern(char pattern[], unsigned int filelength) {
   if (strlen(pattern) > filelength) {
+    printf("String too long\n");
     return 0;
   }
   int sz = strlen(pattern);
+  printf("pattern: %s has size: %d\n", pattern, sz);
   for (int i = 0; i < sz; i++) {
-    printf("checking char: %c\n", pattern[i]);
     if (CheckValidChar(pattern[i]) != 1) {
+      printf("%d Invalid char: %c\n", i, pattern[i]);
       return 0;
     }
   }
@@ -127,6 +127,10 @@ int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns, unsign
     // NEED TO BE ABLE TO COPY MORE THAN JUST ONE PATTERN FROM THE LINE
   }
   printf("num_patterns: %d\n", num_patterns);
+  if (num_patterns > 0) {
+    // Remove newline character from last input
+    strtok(patterns[num_patterns-1], "\n");
+  }
   // Check that each pattern is valid
   for (int i = 0; i < num_patterns; i++) {
     printf("checking pattern: %s\n", patterns[i]);
@@ -137,4 +141,40 @@ int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns, unsign
   }
 
   return num_patterns;
+}
+
+// Search for the pattern within the sequence array
+/*
+  Returns
+    the number of indeces found
+*/
+int FindPattern(char pattern[], char *sequence, int* indeces, unsigned int filelength) {
+  int num_indeces_found = 0;
+  int j;
+  int k;
+  for (unsigned int i = 0; i < filelength; i++) {
+    printf("checking %c against %c\n", pattern[0], *(sequence+i));
+    if ((char)toupper(pattern[0]) == *(sequence+i)) { //first char matches
+      printf("first char matched at %u\n", i);
+      int pattern_len = strlen(pattern);
+      for (j = 0, k = 0; j < pattern_len; j++, k++) { //compare the rest of the chars in the pattern
+        printf("j = %d, k = %d\n", j, k);
+        if ((char)toupper(pattern[j]) != *(sequence+i+k)) {
+          printf("%c was not equal to %c\n", pattern[j], *(sequence+i+k));
+          break;
+        }
+      }
+      printf("j is now: %d\n", j);
+      if (j == pattern_len) { //found
+        printf("original value in indeces array %d\n", *(indeces+num_indeces_found));
+        *(indeces+num_indeces_found) = i;
+        printf("just saved the index of %d\n", *(indeces+num_indeces_found));
+        num_indeces_found += 1;
+      }
+    }
+  }
+
+  printf("first index: %d\n", *indeces);
+
+  return num_indeces_found;
 }

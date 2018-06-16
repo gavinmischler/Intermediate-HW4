@@ -25,19 +25,16 @@ int main(int argc, char const *argv[]) {
     printf("Error: failed to open input file\n");
     return -1;
   }
-  // } else {
-  //   if (!ReadFile(fp, ))
-  // }
   unsigned int num_found = ReadFile(fp, sequence, 0);
   if (num_found == 0) {
     printf("Invalid text file\n");
     return -1;
   }
-  printf("Scanned in: %d\n", num_found);
-  printf("G should be: %c\n", *(sequence+2));
+  // printf("Scanned in: %d\n", num_found);
+  // printf("G should be: %c\n", *(sequence+2));
 
 
-  //Read in the user's list of patterns they want to search for into buffer
+  // Read in the user's list of patterns they want to search for into the patterns array
   int num_patterns = 0;
   char patterns[50][SMALL_MAX_PATTERN_SIZE];
   num_patterns = ReadInputs(patterns, num_patterns, num_found);
@@ -48,6 +45,10 @@ int main(int argc, char const *argv[]) {
   for (int i = 0; i < num_patterns; i++) {
     printf("%s\n", patterns[i]);
   }
+
+  int* indeces = malloc(num_found*sizeof(int));
+  int num_indeces_found = FindPattern(patterns[0], sequence, indeces, num_found);
+  printf("found %s at %d\n", patterns[0], *indeces);
 
 
   // Linked list testing
