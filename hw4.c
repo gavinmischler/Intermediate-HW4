@@ -41,9 +41,6 @@ int main(int argc, char const *argv[]) {
   if (num_patterns == 0) {
     return -1;
   }
-  for (int i = 0; i < num_patterns; i++) {
-    printf("%s\n", patterns[i]);
-  }
 
   for (int i = 0; i < num_patterns; i++) {
 
