@@ -46,10 +46,13 @@ int main(int argc, char const *argv[]) {
     printf("%s\n", patterns[i]);
   }
 
-  int* indeces = malloc(num_found*sizeof(int));
-  int num_indeces_found = FindPattern(patterns[0], sequence, indeces, num_found);
-  printf("found %s at %d\n", patterns[0], *indeces);
+  for (int i = 0; i < num_patterns; i++) {
 
+    int* indeces = malloc(num_found*sizeof(int));
+    int num_indeces_found = FindPattern(patterns[0], sequence, indeces, num_found);
+    printf("found %s at %d\n", patterns[0], *indeces);
+    free(indeces);
+  }
 
   // Linked list testing
   // User_Input *head = NULL, *u;
