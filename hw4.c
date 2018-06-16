@@ -41,7 +41,6 @@ int main(int argc, char const *argv[]) {
   if (num_patterns == 0) {
     return -1;
   }
-  printf("num patterns found: %d\n", num_patterns);
   for (int i = 0; i < num_patterns; i++) {
     printf("%s\n", patterns[i]);
   }
@@ -49,8 +48,16 @@ int main(int argc, char const *argv[]) {
   for (int i = 0; i < num_patterns; i++) {
 
     int* indeces = malloc(num_found*sizeof(int));
-    int num_indeces_found = FindPattern(patterns[0], sequence, indeces, num_found);
-    printf("found %s at %d\n", patterns[0], *indeces);
+    int num_indeces_found = FindPattern(patterns[i], sequence, indeces, num_found);
+    printf("%s", patterns[i]);
+    if (num_indeces_found == 0) {
+      printf(" Not found");
+    } else {
+      for (int j = 0; j < num_indeces_found; j++) {
+        printf(" %d", *(indeces+j));
+      }
+    }
+    printf("\n");
     free(indeces);
   }
 

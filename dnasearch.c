@@ -95,10 +95,8 @@ int CheckValidPattern(char pattern[], unsigned int filelength) {
     return 0;
   }
   int sz = strlen(pattern);
-  printf("pattern: %s has size: %d\n", pattern, sz);
   for (int i = 0; i < sz; i++) {
     if (CheckValidChar(pattern[i]) != 1) {
-      printf("%d Invalid char: %c\n", i, pattern[i]);
       return 0;
     }
   }
@@ -115,7 +113,6 @@ int CheckValidPattern(char pattern[], unsigned int filelength) {
 int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns, unsigned int filelength) {
   char buffer[500];
   if (fgets(buffer, 500, stdin) != NULL) { //read in the line
-    printf("length is: %lu\n", strlen(buffer));
     char * token;
     char delim[2] = " ";
     token = strtok(buffer, delim);
@@ -126,14 +123,12 @@ int ReadInputs(char patterns[][SMALL_MAX_PATTERN_SIZE], int num_patterns, unsign
     }
     // NEED TO BE ABLE TO COPY MORE THAN JUST ONE PATTERN FROM THE LINE
   }
-  printf("num_patterns: %d\n", num_patterns);
   if (num_patterns > 0) {
     // Remove newline character from last input
     strtok(patterns[num_patterns-1], "\n");
   }
   // Check that each pattern is valid
   for (int i = 0; i < num_patterns; i++) {
-    printf("checking pattern: %s\n", patterns[i]);
     if (!CheckValidPattern(patterns[i], filelength)) {
       printf("Invalid pattern\n");
       return 0;
@@ -153,28 +148,18 @@ int FindPattern(char pattern[], char *sequence, int* indeces, unsigned int filel
   int j;
   int k;
   for (unsigned int i = 0; i < filelength; i++) {
-    printf("checking %c against %c\n", pattern[0], *(sequence+i));
     if ((char)toupper(pattern[0]) == *(sequence+i)) { //first char matches
-      printf("first char matched at %u\n", i);
       int pattern_len = strlen(pattern);
       for (j = 0, k = 0; j < pattern_len; j++, k++) { //compare the rest of the chars in the pattern
-        printf("j = %d, k = %d\n", j, k);
         if ((char)toupper(pattern[j]) != *(sequence+i+k)) {
-          printf("%c was not equal to %c\n", pattern[j], *(sequence+i+k));
           break;
         }
       }
-      printf("j is now: %d\n", j);
       if (j == pattern_len) { //found
-        printf("original value in indeces array %d\n", *(indeces+num_indeces_found));
         *(indeces+num_indeces_found) = i;
-        printf("just saved the index of %d\n", *(indeces+num_indeces_found));
         num_indeces_found += 1;
       }
     }
   }
-
-  printf("first index: %d\n", *indeces);
-
   return num_indeces_found;
 }
